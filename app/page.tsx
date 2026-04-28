@@ -12,7 +12,14 @@ function Header() {
 function Footer() {
   return (
     <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t mt-auto">
-      {/* Empty for now as requested */}
+      <p className="text-xs text-muted-foreground">
+        Not affiliated with the University of Waterloo.
+      </p>
+      <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+        <Link className="text-xs hover:underline underline-offset-4 text-muted-foreground" href="https://github.com/matthewholandez/wat-course" target="_blank" rel="noopener noreferrer">
+          GitHub
+        </Link>
+      </nav>
     </footer>
   )
 }
@@ -27,7 +34,7 @@ export default function LandingPage() {
             Wat Course
           </h1>
           <p className="mx-auto max-w-[600px] text-lg text-muted-foreground md:text-xl">
-            Your intelligent guide to University of Waterloo electives. Ask questions, explore options, and plan your perfect term with our AI-powered chatbot.
+            Plan your perfect term at Waterloo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button asChild size="lg" className="h-12 px-8 text-base">
