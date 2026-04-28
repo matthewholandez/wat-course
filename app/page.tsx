@@ -1,10 +1,19 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { ModeToggle } from "@/components/mode-toggle"
 
 function Header() {
   return (
-    <header className="flex h-16 shrink-0 items-center border-b px-4 md:px-6">
-      {/* Empty for now as requested */}
+    <header className="flex h-16 shrink-0 items-center justify-between border-b px-4 md:px-6">
+      <Link href="/" className="font-bold text-lg">
+        Wat Course
+      </Link>
+      <nav className="flex items-center gap-4 sm:gap-6">
+        <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about">
+          About
+        </Link>
+        <ModeToggle />
+      </nav>
     </header>
   )
 }
@@ -30,12 +39,11 @@ export default function LandingPage() {
       <Header />
       <main className="flex-1 flex flex-col justify-center items-center text-center px-4 md:px-6 py-12 md:py-24 lg:py-32">
         <div className="space-y-6 max-w-[800px]">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            Wat Course
+          <h1 className="font-extrabold tracking-tight flex flex-col justify-center items-center gap-2">
+            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">Plan your</span>
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-yellow-500 dark:text-yellow-400">perfect term</span>
+            <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">at Waterloo.</span>
           </h1>
-          <p className="mx-auto max-w-[600px] text-lg text-muted-foreground md:text-xl">
-            Plan your perfect term at Waterloo.
-          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button asChild size="lg" className="h-12 px-8 text-base">
               <Link href="/chat">
