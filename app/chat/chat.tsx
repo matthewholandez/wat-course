@@ -3,14 +3,21 @@
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFooter, SheetClose } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { UserProfileForm } from "./user-profile-form";
-import { Settings } from "lucide-react";
+import { Settings, User, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import Image from "next/image";
 
 export function Chat() {
+    const { theme, setTheme } = useTheme();
     const [isSetupComplete, setIsSetupComplete] = useState<boolean | null>(null);
     const [selectedProgram, setSelectedProgram] = useState<string>("");
     const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+    
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     // States for the edit sheet to handle unsaved changes
     const [editProgram, setEditProgram] = useState<string>("");
@@ -50,6 +57,7 @@ export function Chat() {
         // Populate the sheet with current saved state
         setEditProgram(selectedProgram);
         setEditCourses(selectedCourses);
+        setIsSheetOpen(true);
     };
 
     const handleSaveProfileChanges = () => {
@@ -57,6 +65,7 @@ export function Chat() {
         setSelectedCourses(editCourses);
         localStorage.setItem("userProgram", editProgram);
         localStorage.setItem("userCourses", JSON.stringify(editCourses));
+        setIsSheetOpen(false);
     };
 
     if (isSetupComplete === null) {
@@ -98,14 +107,33 @@ export function Chat() {
     return (
         <div className="flex h-screen flex-col">
             <header className="border-b p-4 flex items-center justify-between">
-                <h1 className="font-semibold text-xl">Course Advisor</h1>
+                <Link href="/" className="font-bold text-lg">
+                    <Image src="/apple-icon.png" alt="Wat Course" width={32} height={32} className="rounded-md" />
+                </Link>
 
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant="ghost" size="icon" onClick={handleOpenSheet} aria-label="Settings">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" aria-label="Settings">
                             <Settings className="h-5 w-5" />
                         </Button>
-                    </SheetTrigger>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleOpenSheet}>
+                            <User className="mr-2 h-4 w-4" />
+                            <span>Edit Profile</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+                            {theme === "dark" ? (
+                                <Sun className="mr-2 h-4 w-4" />
+                            ) : (
+                                <Moon className="mr-2 h-4 w-4" />
+                            )}
+                            <span>Toggle Appearance</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetContent className="flex flex-col">
                         <SheetHeader>
                             <SheetTitle>Your Profile</SheetTitle>
