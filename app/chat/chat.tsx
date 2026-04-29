@@ -19,6 +19,11 @@ export function Chat() {
     
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+    type Message = { role: "user" | "assistant"; content: string; };
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [inputValue, setInputValue] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
     // States for the edit sheet to handle unsaved changes
     const [editProgram, setEditProgram] = useState<string>("");
     const [editCourses, setEditCourses] = useState<string[]>([]);
@@ -66,6 +71,55 @@ export function Chat() {
         localStorage.setItem("userProgram", editProgram);
         localStorage.setItem("userCourses", JSON.stringify(editCourses));
         setIsSheetOpen(false);
+    };
+
+    const handleSendMessage = async () => {
+        if (!inputValue.trim() || isLoading) return;
+        
+        const userMessage = inputValue;
+        setInputValue("");
+        setIsLoading(true);
+        
+        // Optimistically add user message
+        setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
+
+            if (!response.ok || !response.body) {
+                throw new Error("Failed to send message");
+            }
+
+            // Add an empty assistant message that we will stream into
+            setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let assistantMessage = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                // Since our backend now returns plain text chunks via the OpenAI SDK,
+                // we can just append the decoded text directly.
+                assistantMessage += decoder.decode(value, { stream: true });
+                setMessages((prev) => {
+                    const newMessages = [...prev];
+                    newMessages[newMessages.length - 1].content = assistantMessage;
+                    return newMessages;
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            setMessages((prev) => [...prev, { role: "assistant", content: "HONK! I encountered an error. Please try again." }]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     if (isSetupComplete === null) {
@@ -162,18 +216,33 @@ export function Chat() {
                 </Drawer>
             </header>
 
-            <main className="flex-1 overflow-auto p-4 flex flex-col items-center justify-center">
-                <p className="text-muted-foreground">Chat interface will go here.</p>
+            <main className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 max-w-3xl mx-auto w-full">
+                {messages.map((msg, i) => (
+                    <div key={i} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                        <div className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-4 py-2 text-sm md:text-base ${
+                            msg.role === "user" 
+                            ? "bg-primary text-primary-foreground rounded-tr-sm" 
+                            : "bg-muted text-foreground rounded-tl-sm"
+                        }`}>
+                            {msg.content}
+                        </div>
+                    </div>
+                ))}
             </main>
             <div className="p-4 border-t w-full max-w-3xl mx-auto">
                 <div className="flex gap-2">
                     <input
                         type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                         placeholder="Ask a question..."
-                        className="flex-1 rounded-md border p-2"
-                        disabled
+                        disabled={isLoading}
+                        className="flex-1 rounded-md border bg-background p-2 px-3 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
                     />
-                    <Button disabled>Send</Button>
+                    <Button onClick={handleSendMessage} disabled={isLoading || !inputValue.trim()}>
+                        {isLoading ? "Sending..." : "Send"}
+                    </Button>
                 </div>
             </div>
         </div>
