@@ -1,5 +1,5 @@
 import axios from "axios";
-import fs from "fs";
+import { mkdir, writeFile } from 'node:fs/promises';
 
 const PROG_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/programs/67e557ed6ed2fe2bd3a38956?q="
 
@@ -47,5 +47,14 @@ const majorData = data.filter(program => {
     return program.undergraduateCredentialType.name === 'Major';
 })
 
-fs.writeFileSync("data/programs.json", JSON.stringify(majorData, null, 4));
-console.log("Data exported to data/programs.json");
+async function saveProgramData(data: Program[]) {
+    try {
+        await mkdir('data', { recursive: true });
+        await writeFile('data/programs.json', JSON.stringify(data, null, 4), { flag: 'w' });
+        console.log("Write complete: data/programs.json");
+    } catch (error: Error | unknown) {
+        console.error(`Error writing to data/programs.json: ${error instanceof Error ? error.message : error}`);
+    }
+}
+
+saveProgramData(majorData);

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { mkdir, writeFile } from "node:fs/promises";
 
 const COURSES_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/courses/67e557ed6ed2fe2bd3a38956?q=";
 
@@ -42,4 +43,14 @@ try {
     }
 }
 
-console.log(data);
+async function saveCourseData(data: Course[]) {
+    try {
+        await mkdir('data', { recursive: true });
+        await writeFile('data/courses.json', JSON.stringify(data, null, 4), { flag: 'w' });
+        console.log("Write complete: data/courses.json");
+    } catch (error: Error | unknown) {
+        console.error(`Error writing to data/courses.json: ${error instanceof Error ? error.message : error}`);
+    }
+}
+
+saveCourseData(data);
