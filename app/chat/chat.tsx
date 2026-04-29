@@ -138,10 +138,10 @@ export function Chat() {
                         <SheetHeader>
                             <SheetTitle>Your Profile</SheetTitle>
                             <SheetDescription>
-                                Update your program and courses so we can give you better advice.
+                                Update your program and courses so the Goose can tailor advice to your situation.
                             </SheetDescription>
                         </SheetHeader>
-                        <div className="py-6 flex-1 overflow-y-auto">
+                        <div className="py-6 px-4 flex-1 overflow-y-auto">
                             <UserProfileForm
                                 selectedProgram={editProgram}
                                 setSelectedProgram={setEditProgram}
