@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { UserProfileForm } from "./user-profile-form";
 import { Settings } from "lucide-react";
 
-export function ChatClient() {
+export function Chat() {
     const [isSetupComplete, setIsSetupComplete] = useState<boolean | null>(null);
     const [selectedProgram, setSelectedProgram] = useState<string>("");
     const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
