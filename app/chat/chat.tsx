@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFooter, SheetClose } from "@/components/ui/sheet";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { UserProfileForm } from "./user-profile-form";
 import { Settings, User, Moon, Sun } from "lucide-react";
@@ -133,31 +133,33 @@ export function Chat() {
                     </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetContent className="flex flex-col">
-                        <SheetHeader>
-                            <SheetTitle>Your Profile</SheetTitle>
-                            <SheetDescription>
-                                Update your program and courses so the Goose can tailor advice to your situation.
-                            </SheetDescription>
-                        </SheetHeader>
-                        <div className="py-6 px-4 flex-1 overflow-y-auto">
-                            <UserProfileForm
-                                selectedProgram={editProgram}
-                                setSelectedProgram={setEditProgram}
-                                selectedCourses={editCourses}
-                                setSelectedCourses={setEditCourses}
-                            />
+                <Drawer open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    <DrawerContent className="flex flex-col max-h-[85vh]">
+                        <div className="w-full max-w-4xl mx-auto flex flex-col h-full">
+                            <DrawerHeader>
+                                <DrawerTitle>Your Profile</DrawerTitle>
+                                <DrawerDescription>
+                                    Update your program and courses so the Goose can tailor advice to your situation.
+                                </DrawerDescription>
+                            </DrawerHeader>
+                            <div className="py-6 px-4 flex-1 overflow-y-auto">
+                                <UserProfileForm
+                                    selectedProgram={editProgram}
+                                    setSelectedProgram={setEditProgram}
+                                    selectedCourses={editCourses}
+                                    setSelectedCourses={setEditCourses}
+                                />
+                            </div>
+                            <DrawerFooter>
+                                <DrawerClose asChild>
+                                    <Button onClick={handleSaveProfileChanges} disabled={!editProgram}>
+                                        Save changes
+                                    </Button>
+                                </DrawerClose>
+                            </DrawerFooter>
                         </div>
-                        <SheetFooter>
-                            <SheetClose asChild>
-                                <Button onClick={handleSaveProfileChanges} disabled={!editProgram}>
-                                    Save changes
-                                </Button>
-                            </SheetClose>
-                        </SheetFooter>
-                    </SheetContent>
-                </Sheet>
+                    </DrawerContent>
+                </Drawer>
             </header>
 
             <main className="flex-1 overflow-auto p-4 flex flex-col items-center justify-center">

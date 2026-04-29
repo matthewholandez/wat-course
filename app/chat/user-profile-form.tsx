@@ -40,11 +40,13 @@ export function UserProfileForm({
                             variant="outline"
                             role="combobox"
                             aria-expanded={programOpen}
-                            className="w-full justify-between"
+                            className="w-full justify-between h-auto py-2"
                         >
-                            {selectedProgram
-                                ? programsData.find((program) => program.id === selectedProgram)?.title
-                                : "Select a program..."}
+                            <span className="text-left font-normal whitespace-normal block">
+                                {selectedProgram
+                                    ? programsData.find((program) => program.id === selectedProgram)?.title
+                                    : "Select a program..."}
+                            </span>
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
@@ -62,14 +64,15 @@ export function UserProfileForm({
                                                 setSelectedProgram(program.id);
                                                 setProgramOpen(false);
                                             }}
+                                            className="whitespace-normal break-words py-2 flex items-start"
                                         >
                                             <Check
                                                 className={cn(
-                                                    "mr-2 h-4 w-4",
+                                                    "mr-2 h-4 w-4 shrink-0 mt-1",
                                                     selectedProgram === program.id ? "opacity-100" : "opacity-0"
                                                 )}
                                             />
-                                            {program.title}
+                                            <span className="flex-1">{program.title}</span>
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>
@@ -109,10 +112,13 @@ export function UserProfileForm({
                                                     setSelectedCourses([...selectedCourses, course.id]);
                                                     setCourseOpen(false);
                                                 }}
+                                                className="whitespace-normal break-words py-2 flex items-start"
                                             >
-                                                <Check className="mr-2 h-4 w-4 opacity-0" />
-                                                <span className="font-semibold mr-2">{course.__catalogCourseId}</span>
-                                                {course.title}
+                                                <Check className="mr-2 h-4 w-4 opacity-0 shrink-0 mt-1" />
+                                                <div className="flex flex-col">
+                                                    <span className="font-semibold">{course.__catalogCourseId}</span>
+                                                    <span className="text-sm text-muted-foreground">{course.title}</span>
+                                                </div>
                                             </CommandItem>
                                         ))}
                                 </CommandGroup>
