@@ -1,31 +1,31 @@
 import axios from "axios";
 
-const PROG_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/programs/67e557ed6ed2fe2bd3a38956?q="
+const COURSES_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/courses/67e557ed6ed2fe2bd3a38956?q=";
 
-export type Program = {
-    code: string;
+export type Course = {
+    __catalogCourseId: string;
     __passedCatalogQuery: boolean;
-    undergraduateCredentialType: {
+    courseLevel: {
         name: string;
         id: string;
     }
     dateStart: string;
     pid: string;
     id: string;
-    title: string
-    fieldOfStudy: {
+    title: string;
+    subjectCode: {
         name: string;
+        description: string;
         id: string;
-        customFields: object;
     }
     catalogActivationDate: string;
     _score: Number;
 }
 
-let data: Program[] = []
+let data: Course[] = []
 
 try {
-    const response = await axios.get<Program[]>(PROG_URL);
+    const response = await axios.get<Course[]>(COURSES_URL);
     data = response.data;
 } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -42,8 +42,4 @@ try {
     }
 }
 
-const majorData = data.filter(program => {
-    return program.undergraduateCredentialType.name === 'Major';
-})
-
-console.log(majorData);
+console.log(data);
