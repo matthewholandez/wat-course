@@ -1,4 +1,5 @@
 import axios from "axios";
+import fs from "fs";
 
 const PROG_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/programs/67e557ed6ed2fe2bd3a38956?q="
 
@@ -46,4 +47,5 @@ const majorData = data.filter(program => {
     return program.undergraduateCredentialType.name === 'Major';
 })
 
-console.log(majorData);
+fs.writeFileSync("data/programs.json", JSON.stringify(majorData, null, 4));
+console.log("Data exported to data/programs.json");
