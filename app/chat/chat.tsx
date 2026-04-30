@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
 
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";
 
+import HomeIcon from "@/components/HomeIcon";
 import SetupScreen from "./SetupScreen";
-import UserProfileForm from "./UserProfileForm";
 import SettingsDropdown from "./SettingsDropdown";
 import SettingsDrawer from "./SettingsDrawer";
 
@@ -128,9 +127,7 @@ export function Chat() {
     return (
         <div className="flex h-screen flex-col">
             <header className="border-b p-4 flex items-center justify-between">
-                <Link href="/" className="font-bold text-lg">
-                    <Image src="/apple-icon.png" alt="Wat Course" width={32} height={32} className="rounded-md" />
-                </Link>
+                <HomeIcon/>
 
                 <SettingsDropdown
                     selectedProgram={selectedProgram}
