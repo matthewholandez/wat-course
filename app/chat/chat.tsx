@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
 import { useTheme } from "next-themes";
 
+// Components
 import HomeIcon from "@/components/HomeIcon";
 import SetupScreen from "./SetupScreen";
 import SettingsDropdown from "./SettingsDropdown";
@@ -11,51 +11,26 @@ import SettingsDrawer from "./SettingsDrawer";
 import MessageArea from "./MessageArea";
 import MessageInputBar from "./MessageInputBar";
 
+// States
+import useUserProfile from "@/hooks/useUserProfile";
+
+// Types
 import type { Message } from "./MessageArea";
 
-/**
- * Da Chat
- */
 export function Chat() {
     const { theme, setTheme } = useTheme();
-    const [isSetupComplete, setIsSetupComplete] = useState<boolean | null>(null);
-    const [selectedProgram, setSelectedProgram] = useState<string>("");
-    const [currentConversationId, setCurrentConversationId] = useState<string>("");
-    const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
-    
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+    const { isSetupComplete, setIsSetupComplete, 
+        editProgram, setEditProgram, 
+        editCourses, setEditCourses, 
+        selectedProgram, setSelectedProgram, 
+        selectedCourses, setSelectedCourses, 
+        currentConversationId, setCurrentConversationId } = useUserProfile();
+    
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    // States for the edit sheet to handle unsaved changes
-    const [editProgram, setEditProgram] = useState<string>("");
-    const [editCourses, setEditCourses] = useState<string[]>([]);
-
-    // Runs on component load (initial load / after refresh)
-    useEffect(() => {
-        // Check if user has already set up
-        const savedProgram = localStorage.getItem("userProgram");
-        const savedCourses = localStorage.getItem("userCourses");
-
-        // We update state in a timeout to avoid cascading renders warning in React 18+ strict mode
-        // Though it's standard to do this in useEffect for hydration mismatches on Next.js client components.
-        setTimeout(() => {
-            if (savedProgram && savedCourses) {
-                setSelectedProgram(savedProgram);
-                try {
-                    setSelectedCourses(JSON.parse(savedCourses));
-                } catch {
-                    setSelectedCourses([]);
-                }
-                setIsSetupComplete(true);
-                setCurrentConversationId(self.crypto.randomUUID());
-            } else {
-                setIsSetupComplete(false);
-            }
-        }, 0);
-    }, []);
 
     const handleSendMessage = async () => {
         if (!inputValue.trim() || isLoading) return;
