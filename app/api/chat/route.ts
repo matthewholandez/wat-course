@@ -1,33 +1,42 @@
-import OpenAI from "openai";
+import { OpenRouter } from "@openrouter/sdk";
 
 export const runtime = "edge";
 
-const openai = new OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY || "",
-});
+const openRouter = new OpenRouter({
+    apiKey: process.env.OPENROUTER_API_KEY || ""
+})
 
 export async function POST(req: Request) {
     try {
         const { message } = await req.json();
 
         if (!process.env.OPENROUTER_API_KEY) {
-            return new Response("Missing OPENROUTER_API_KEY", { status: 500 });
+            return new Response("Missing OPENROUTER_API_KEY from .env.local", { status: 500 });
+        }
+        
+        if (!process.env.MODEL) {
+            return new Response("Missing MODEL from .env", { status: 500 });
         }
 
-        const response = await openai.chat.completions.create({
-            model: "google/gemini-3.1-flash-lite-preview",
-            messages: [{ role: "user", content: message }],
-            stream: true,
+        const stream = await openRouter.chat.send({
+            chatRequest: {
+                maxTokens: 1000,
+                messages: [{
+                    content: message,
+                    role: "user"
+                }],
+                model: process.env.MODEL,
+                temperature: 0.7,
+                stream: true
+            }
         });
 
-        // Convert the OpenAI AsyncIterable to a standard Web Streams API ReadableStream
-        const stream = new ReadableStream({
+        const readableStream = new ReadableStream({
             async start(controller) {
                 const encoder = new TextEncoder();
                 try {
-                    for await (const chunk of response) {
-                        const content = chunk.choices[0]?.delta?.content || "";
+                    for await (const chunk of stream) {
+                        const content = chunk.choices?.[0]?.delta?.content;
                         if (content) {
                             controller.enqueue(encoder.encode(content));
                         }
@@ -38,9 +47,9 @@ export async function POST(req: Request) {
                     controller.close();
                 }
             },
-        });
+        })
 
-        return new Response(stream, {
+        return new Response(readableStream, {
             headers: {
                 "Content-Type": "text/plain; charset=utf-8",
                 "Cache-Control": "no-cache",
