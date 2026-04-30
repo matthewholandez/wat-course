@@ -1,10 +1,15 @@
 import { OpenRouter } from "@openrouter/sdk";
+// import { createClient } from "redis";
 
 export const runtime = "edge";
 
-const openRouter = new OpenRouter({
+const openRouterClient = new OpenRouter({
     apiKey: process.env.OPENROUTER_API_KEY || ""
 })
+
+// const redisClient = createClient();
+// redisClient.on('error', err => console.log('Redis client error', err));
+// await redisClient.connect();
 
 export async function POST(req: Request) {
     try {
@@ -18,13 +23,19 @@ export async function POST(req: Request) {
             return new Response("Missing MODEL from .env", { status: 500 });
         }
 
-        const stream = await openRouter.chat.send({
+        const stream = await openRouterClient.chat.send({
             chatRequest: {
                 maxTokens: 1000,
-                messages: [{
-                    content: message,
-                    role: "user"
-                }],
+                messages: [
+                    {
+                        content: "You are a Student Advisor at the University of Waterloo. Also, you're a goose. Respond to the student's question, concisely, and do not use any markdown. You may use humour conservatively.",
+                        role: "system"
+                    },
+                    {
+                        content: message,
+                        role: "user"
+                    }
+                ],
                 model: process.env.MODEL,
                 temperature: 0.7,
                 stream: true
