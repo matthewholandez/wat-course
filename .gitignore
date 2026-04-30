@@ -38,3 +38,6 @@ next-env.d.ts
 
 # data
 /data/
+
+# redis
+dump.rdb

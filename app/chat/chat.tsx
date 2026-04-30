@@ -15,6 +15,7 @@ export function Chat() {
     const { theme, setTheme } = useTheme();
     const [isSetupComplete, setIsSetupComplete] = useState<boolean | null>(null);
     const [selectedProgram, setSelectedProgram] = useState<string>("");
+    const [currentConversationId, setCurrentConversationId] = useState<string>("");
     const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
     
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -44,6 +45,7 @@ export function Chat() {
                     setSelectedCourses([]);
                 }
                 setIsSetupComplete(true);
+                setCurrentConversationId(self.crypto.randomUUID());
             } else {
                 setIsSetupComplete(false);
             }
@@ -84,10 +86,11 @@ export function Chat() {
         setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
 
         try {
+            console.log(currentConversationId)
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage })
+                body: JSON.stringify({ message: userMessage, conversationId: currentConversationId }),
             });
 
             if (!response.ok || !response.body) {

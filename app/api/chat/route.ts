@@ -1,19 +1,16 @@
 import { OpenRouter } from "@openrouter/sdk";
-// import { createClient } from "redis";
+import RedisSingleton from "@/lib/redis";
+import { SCHEMA_FIELD_TYPE, FT_AGGREGATE_GROUP_BY_REDUCERS, FT_AGGREGATE_STEPS } from "redis";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const openRouterClient = new OpenRouter({
     apiKey: process.env.OPENROUTER_API_KEY || ""
 })
 
-// const redisClient = createClient();
-// redisClient.on('error', err => console.log('Redis client error', err));
-// await redisClient.connect();
-
 export async function POST(req: Request) {
     try {
-        const { message } = await req.json();
+        const { message, conversationId } = await req.json();
 
         if (!process.env.OPENROUTER_API_KEY) {
             return new Response("Missing OPENROUTER_API_KEY from .env.local", { status: 500 });
@@ -22,6 +19,8 @@ export async function POST(req: Request) {
         if (!process.env.MODEL) {
             return new Response("Missing MODEL from .env", { status: 500 });
         }
+
+        const redis = await RedisSingleton.getInstance();
 
         const stream = await openRouterClient.chat.send({
             chatRequest: {
