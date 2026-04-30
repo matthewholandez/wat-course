@@ -10,7 +10,7 @@ import Image from "next/image";
 
 import SetupScreen from "./SetupScreen";
 import UserProfileForm from "./UserProfileForm";
-import SettingsDrawer from "./SettingsDrawer";
+import SettingsDropdown from "./SettingsDropdown";
 
 /**
  * Da Chat
@@ -140,7 +140,7 @@ export function Chat() {
                     <Image src="/apple-icon.png" alt="Wat Course" width={32} height={32} className="rounded-md" />
                 </Link>
 
-                <SettingsDrawer
+                <SettingsDropdown
                     selectedProgram={selectedProgram}
                     setEditProgram={setEditProgram}
                     selectedCourses={selectedCourses}

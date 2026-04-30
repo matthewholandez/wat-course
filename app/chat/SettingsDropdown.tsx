@@ -2,7 +2,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button";
 import { Settings, User, Moon, Sun } from "lucide-react";
 
-interface SettingsDrawerProps {
+interface SettingsDropdownProps {
     selectedProgram: string;
     setEditProgram: (program: string) => void;
     selectedCourses: string[];
@@ -12,7 +12,7 @@ interface SettingsDrawerProps {
     setTheme: (theme: string) => void;
 }
 
-export default function SettingsDrawer({
+export default function SettingsDropdown({
     selectedProgram,
     setEditProgram,
     selectedCourses,
@@ -20,7 +20,7 @@ export default function SettingsDrawer({
     setIsSheetOpen,
     theme,
     setTheme
-}: SettingsDrawerProps) {
+}: SettingsDropdownProps) {
 
     const handleOpenSheet = () => {
         setEditProgram(selectedProgram);
