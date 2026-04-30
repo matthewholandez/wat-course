@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Settings, User, Moon, Sun } from "lucide-react";
 
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -12,6 +10,7 @@ import Image from "next/image";
 
 import SetupScreen from "./SetupScreen";
 import UserProfileForm from "./UserProfileForm";
+import SettingsDrawer from "./SettingsDrawer";
 
 /**
  * Da Chat
@@ -34,6 +33,7 @@ export function Chat() {
     const [editProgram, setEditProgram] = useState<string>("");
     const [editCourses, setEditCourses] = useState<string[]>([]);
 
+    // Runs on component load (initial load / after refresh)
     useEffect(() => {
         // Check if user has already set up
         const savedProgram = localStorage.getItem("userProgram");
@@ -57,11 +57,6 @@ export function Chat() {
         }, 0);
     }, []);
 
-    const handleOpenSheet = () => {
-        setEditProgram(selectedProgram);
-        setEditCourses(selectedCourses);
-        setIsSheetOpen(true);
-    };
 
     const handleSaveProfileChanges = () => {
         setSelectedProgram(editProgram);
@@ -145,27 +140,15 @@ export function Chat() {
                     <Image src="/apple-icon.png" alt="Wat Course" width={32} height={32} className="rounded-md" />
                 </Link>
 
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" aria-label="Settings">
-                            <Settings className="h-5 w-5" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={handleOpenSheet}>
-                            <User className="mr-2 h-4 w-4" />
-                            <span>Edit Profile</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                            {theme === "dark" ? (
-                                <Sun className="mr-2 h-4 w-4" />
-                            ) : (
-                                <Moon className="mr-2 h-4 w-4" />
-                            )}
-                            <span>Toggle Appearance</span>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <SettingsDrawer
+                    selectedProgram={selectedProgram}
+                    setEditProgram={setEditProgram}
+                    selectedCourses={selectedCourses}
+                    setEditCourses={setEditCourses}
+                    setIsSheetOpen={setIsSheetOpen}
+                    theme={theme}
+                    setTheme={setTheme}
+                />
 
                 <Drawer open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <DrawerContent className="flex flex-col max-h-[85vh]">
