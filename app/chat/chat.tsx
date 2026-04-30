@@ -11,6 +11,7 @@ import Image from "next/image";
 import SetupScreen from "./SetupScreen";
 import UserProfileForm from "./UserProfileForm";
 import SettingsDropdown from "./SettingsDropdown";
+import SettingsDrawer from "./SettingsDrawer";
 
 /**
  * Da Chat
@@ -56,15 +57,6 @@ export function Chat() {
             }
         }, 0);
     }, []);
-
-
-    const handleSaveProfileChanges = () => {
-        setSelectedProgram(editProgram);
-        setSelectedCourses(editCourses);
-        localStorage.setItem("userProgram", editProgram);
-        localStorage.setItem("userCourses", JSON.stringify(editCourses));
-        setIsSheetOpen(false);
-    };
 
     const handleSendMessage = async () => {
         if (!inputValue.trim() || isLoading) return;
@@ -150,33 +142,16 @@ export function Chat() {
                     setTheme={setTheme}
                 />
 
-                <Drawer open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <DrawerContent className="flex flex-col max-h-[85vh]">
-                        <div className="w-full max-w-4xl mx-auto flex flex-col h-full">
-                            <DrawerHeader>
-                                <DrawerTitle>Your Profile</DrawerTitle>
-                                <DrawerDescription>
-                                    Update your program and courses so the Goose can tailor advice to your situation.
-                                </DrawerDescription>
-                            </DrawerHeader>
-                            <div className="py-6 px-4 flex-1 overflow-y-auto">
-                                <UserProfileForm
-                                    selectedProgram={editProgram}
-                                    setSelectedProgram={setEditProgram}
-                                    selectedCourses={editCourses}
-                                    setSelectedCourses={setEditCourses}
-                                />
-                            </div>
-                            <DrawerFooter>
-                                <DrawerClose asChild>
-                                    <Button onClick={handleSaveProfileChanges} disabled={!editProgram}>
-                                        Save changes
-                                    </Button>
-                                </DrawerClose>
-                            </DrawerFooter>
-                        </div>
-                    </DrawerContent>
-                </Drawer>
+                <SettingsDrawer
+                    isSheetOpen={isSheetOpen}
+                    setIsSheetOpen={setIsSheetOpen}
+                    editProgram={editProgram}
+                    setEditProgram={setEditProgram}
+                    editCourses={editCourses}
+                    setEditCourses={setEditCourses}
+                    setSelectedProgram={setSelectedProgram}
+                    setSelectedCourses={setSelectedCourses}
+                />
             </header>
 
             <main className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 max-w-3xl mx-auto w-full">
