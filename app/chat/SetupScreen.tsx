@@ -8,7 +8,7 @@ interface SetupScreenProps {
     setSelectedProgram: (program: string) => void;
     selectedCourses: string[];
     setSelectedCourses: (courses: string[]) => void;
-    isSetupComplete: boolean;
+    isSetupComplete: boolean | null;
     setIsSetupComplete: (isComplete: boolean) => void;
 }
 
@@ -28,6 +28,10 @@ export default function SetupScreen({
             setIsSetupComplete(true);
         }
     };
+
+    if (isSetupComplete || isSetupComplete === null) {
+        return null;
+    }
 
     return (
         <div className="flex h-screen w-full items-center justify-center p-4">

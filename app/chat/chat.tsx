@@ -25,7 +25,6 @@ export function Chat() {
     
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    // type Message = { role: "user" | "assistant"; content: string; };
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -108,24 +107,18 @@ export function Chat() {
         }
     };
 
-    if (isSetupComplete === null) {
-        return null; // Or a loading spinner
-    }
-
-    if (!isSetupComplete) {
-        return (
-            <SetupScreen
-                selectedProgram={selectedProgram}
-                setSelectedProgram={setSelectedProgram}
-                selectedCourses={selectedCourses}
-                setSelectedCourses={setSelectedCourses}
-                isSetupComplete={isSetupComplete}
-                setIsSetupComplete={setIsSetupComplete}
-            />
-        );
-    }
-
     return (
+        <>
+        {/* This only runs if isSetupComplete is false */}
+        <SetupScreen
+            selectedProgram={selectedProgram}
+            setSelectedProgram={setSelectedProgram}
+            selectedCourses={selectedCourses}
+            setSelectedCourses={setSelectedCourses}
+            isSetupComplete={isSetupComplete}
+            setIsSetupComplete={setIsSetupComplete}
+        />
+
         <div className="flex h-screen flex-col">
             <header className="border-b p-4 flex items-center justify-between">
                 <HomeIcon/>
@@ -165,5 +158,6 @@ export function Chat() {
                 isLoading={isLoading}
             />
         </div>
+        </>
     );
 }
