@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Chat } from "./chat";
+import { Chat } from "./Chat";
 
 export const metadata: Metadata = {
     title: 'Chat'

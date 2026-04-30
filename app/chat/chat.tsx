@@ -1,16 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { UserProfileForm } from "./user-profile-form";
 import { Settings, User, Moon, Sun } from "lucide-react";
+
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";
 
+import SetupScreen from "./SetupScreen";
+import UserProfileForm from "./UserProfileForm";
+
+/**
+ * Da Chat
+ */
 export function Chat() {
     const { theme, setTheme } = useTheme();
     const [isSetupComplete, setIsSetupComplete] = useState<boolean | null>(null);
@@ -52,16 +57,7 @@ export function Chat() {
         }, 0);
     }, []);
 
-    const handleCompleteSetup = () => {
-        if (selectedProgram) {
-            localStorage.setItem("userProgram", selectedProgram);
-            localStorage.setItem("userCourses", JSON.stringify(selectedCourses));
-            setIsSetupComplete(true);
-        }
-    };
-
     const handleOpenSheet = () => {
-        // Populate the sheet with current saved state
         setEditProgram(selectedProgram);
         setEditCourses(selectedCourses);
         setIsSheetOpen(true);
@@ -131,33 +127,14 @@ export function Chat() {
 
     if (!isSetupComplete) {
         return (
-            <div className="flex h-screen w-full items-center justify-center p-4">
-                <Card className="w-full max-w-lg">
-                    <CardHeader>
-                        <CardTitle>Welcome! Let&apos;s get you set up.</CardTitle>
-                        <CardDescription>
-                            Please tell us about your program and the courses you&apos;ve taken to personalize your experience.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <UserProfileForm
-                            selectedProgram={selectedProgram}
-                            setSelectedProgram={setSelectedProgram}
-                            selectedCourses={selectedCourses}
-                            setSelectedCourses={setSelectedCourses}
-                        />
-                    </CardContent>
-                    <CardFooter>
-                        <Button
-                            className="w-full"
-                            onClick={handleCompleteSetup}
-                            disabled={!selectedProgram}
-                        >
-                            Continue to Chat
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
+            <SetupScreen
+                selectedProgram={selectedProgram}
+                setSelectedProgram={setSelectedProgram}
+                selectedCourses={selectedCourses}
+                setSelectedCourses={setSelectedCourses}
+                isSetupComplete={isSetupComplete}
+                setIsSetupComplete={setIsSetupComplete}
+            />
         );
     }
 

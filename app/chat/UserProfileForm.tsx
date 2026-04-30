@@ -10,19 +10,19 @@ import { cn } from "@/lib/utils";
 import programsData from "@/data/programs.json";
 import coursesData from "@/data/courses.json";
 
-interface UserProfileFormProps {
+interface UserProfileProps {
     selectedProgram: string;
     setSelectedProgram: (program: string) => void;
     selectedCourses: string[];
     setSelectedCourses: (courses: string[]) => void;
 }
 
-export function UserProfileForm({
+export default function UserProfileForm({
     selectedProgram,
     setSelectedProgram,
     selectedCourses,
     setSelectedCourses,
-}: UserProfileFormProps) {
+}: UserProfileProps) {
     const [programOpen, setProgramOpen] = useState(false);
     const [courseOpen, setCourseOpen] = useState(false);
 
