@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 import { useTheme } from "next-themes";
-import Link from "next/link";
-import Image from "next/image";
 
 import HomeIcon from "@/components/HomeIcon";
 import SetupScreen from "./SetupScreen";
 import SettingsDropdown from "./SettingsDropdown";
 import SettingsDrawer from "./SettingsDrawer";
+import MessageArea from "./MessageArea";
+import MessageInputBar from "./MessageInputBar";
+
+import type { Message } from "./MessageArea";
 
 /**
  * Da Chat
@@ -24,7 +25,7 @@ export function Chat() {
     
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    type Message = { role: "user" | "assistant"; content: string; };
+    // type Message = { role: "user" | "assistant"; content: string; };
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -151,35 +152,18 @@ export function Chat() {
                 />
             </header>
 
-            <main className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 max-w-3xl mx-auto w-full">
-                {messages.map((msg, i) => (
-                    <div key={i} className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-4 py-2 text-sm md:text-base ${
-                            msg.role === "user" 
-                            ? "bg-primary text-primary-foreground rounded-tr-sm" 
-                            : "bg-muted text-foreground rounded-tl-sm"
-                        }`}>
-                            {msg.content}
-                        </div>
-                    </div>
-                ))}
+            <main>
+                <MessageArea
+                    messages={messages}
+                />
             </main>
-            <div className="p-4 border-t w-full max-w-3xl mx-auto">
-                <div className="flex gap-2">
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                        placeholder="Ask a question..."
-                        disabled={isLoading}
-                        className="flex-1 rounded-md border bg-background p-2 px-3 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
-                    />
-                    <Button onClick={handleSendMessage} disabled={isLoading || !inputValue.trim()}>
-                        {isLoading ? "Sending..." : "Send"}
-                    </Button>
-                </div>
-            </div>
+
+            <MessageInputBar
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                handleSendMessage={handleSendMessage}
+                isLoading={isLoading}
+            />
         </div>
     );
 }
