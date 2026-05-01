@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
 // Components
@@ -31,6 +31,16 @@ export function Chat() {
         isLoading, setIsLoading,
         handleSendMessage
     } = useChatEngine();
+
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Prevent Radix/Next-Themes hydration mismatch
+    if (!mounted) {
+        return null; // Or a loading skeleton matching the header
+    }
 
     return (
         <>

@@ -8,7 +8,7 @@ import type { ValidateIdResponse } from "@/app/api/chat/validateId/route";
 /**
  * A request containing a user message to be sent to the API.
  */
-type MessageRequest = {
+export type MessageRequest = {
     conversationId: string,
     content: string,
 };
@@ -24,7 +24,7 @@ export default function useChatEngine() {
         
         const userMessage: MessageRequest = {
             conversationId: currentConversationId,
-            content: "lol"
+            content: inputValue
         }
         setInputValue("");
         setIsLoading(true);

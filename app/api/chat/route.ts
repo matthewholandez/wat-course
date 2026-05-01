@@ -1,20 +1,17 @@
 import { OpenRouter } from "@openrouter/sdk";
 import RedisSingleton from "@/lib/redis";
 
+import type { MessageRequest } from "@/hooks/useChatEngine";
+
 export const runtime = "nodejs";
 
 const openRouterClient = new OpenRouter({
     apiKey: process.env.OPENROUTER_API_KEY || ""
 })
 
-type MessageRequest = {
-    conversationId: string,
-    message: string
-}
-
 export async function POST(req: Request) {
     try {
-        const { conversationId, message }: MessageRequest = await req.json();
+        const { conversationId, content }: MessageRequest = await req.json();
 
         if (!process.env.OPENROUTER_API_KEY) {
             return new Response("Missing OPENROUTER_API_KEY from .env.local", { status: 500 });
@@ -35,7 +32,7 @@ export async function POST(req: Request) {
                         role: "system"
                     },
                     {
-                        content: message,
+                        content: content,
                         role: "user"
                     }
                 ],
@@ -71,6 +68,7 @@ export async function POST(req: Request) {
             },
         });
     } catch (error: any) {
+        console.log(error)
         return new Response(error.message || "Internal Server Error", { status: 500 });
     }
 }
