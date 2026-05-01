@@ -110,34 +110,33 @@ export default function useChatEngine() {
         }
 
         handleIdCheck(savedConversationId);
+    }, [])
 
-        const handleMessageHistory = async () => {
-            const response = await fetch(`api/chat/history?id=${savedConversationId}`, {
+    const handleNewChat = async () => {
+        setMessages([]);
+        try {
+            const response = await fetch('api/chat/createId', {
                 method: 'GET',
-                // body: JSON.stringify({ id: currentConversationId })
             });
 
             if (!response.ok || !response.body) {
-                throw new Error("Failed to fetch message history");
+                throw new Error("Failed to create conversationId via API");
             }
 
-            const data: MessageHistoryResponse = await response.json()
-            setTimeout(() => {
-                setMessages(data.messageHistory);
-            }, 0)
+            const data: CreateIdResponse = await response.json();
+            const validId = data.conversationId;
+            setCurrentConversationId(validId);
+            localStorage.setItem("conversationId", validId);
+        } catch (error) {
+            console.error("Error creating new chat:", error);
         }
-        
-        handleMessageHistory();
-        // if (currentConversationId) {
-        //     console.log("YESSSS")
-        //     handleMessageHistory();
-        // }
-    }, [])
+    };
 
     return {
         messages,
         inputValue, setInputValue,
         isLoading, setIsLoading,
-        handleSendMessage
+        handleSendMessage,
+        handleNewChat
     };
 }

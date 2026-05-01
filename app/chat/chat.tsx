@@ -11,6 +11,9 @@ import SettingsDrawer from "./SettingsDrawer";
 import MessageArea from "./MessageArea";
 import MessageInputBar from "./MessageInputBar";
 
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+
 // States
 import useUserProfile from "@/hooks/useUserProfile";
 import useChatEngine from "@/hooks/useChatEngine";
@@ -29,7 +32,8 @@ export function Chat() {
         messages,
         inputValue, setInputValue,
         isLoading, setIsLoading,
-        handleSendMessage
+        handleSendMessage,
+        handleNewChat
     } = useChatEngine();
 
     const [mounted, setMounted] = useState(false);
@@ -55,19 +59,30 @@ export function Chat() {
         />
         {/* --------- */}
 
-        <div className="flex h-screen flex-col">
-            <header className="border-b p-4 flex items-center justify-between">
-                <HomeIcon/>
+        <div className="flex h-[100dvh] flex-col overflow-hidden">
+            <header className="border-b p-4 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2">
+                    <HomeIcon/>
+                    <Button variant="outline" size="sm" onClick={handleNewChat} className="ml-2 hidden sm:flex">
+                        <Plus className="mr-2 h-4 w-4" />
+                        New Chat
+                    </Button>
+                    <Button variant="outline" size="icon" onClick={handleNewChat} className="ml-2 sm:hidden" aria-label="New Chat">
+                        <Plus className="h-4 w-4" />
+                    </Button>
+                </div>
 
-                <SettingsDropdown
-                    selectedProgram={selectedProgram}
-                    setEditProgram={setEditProgram}
-                    selectedCourses={selectedCourses}
-                    setEditCourses={setEditCourses}
-                    setIsSheetOpen={setIsSheetOpen}
-                    theme={theme}
-                    setTheme={setTheme}
-                />
+                <div className="flex items-center gap-2">
+                    <SettingsDropdown
+                        selectedProgram={selectedProgram}
+                        setEditProgram={setEditProgram}
+                        selectedCourses={selectedCourses}
+                        setEditCourses={setEditCourses}
+                        setIsSheetOpen={setIsSheetOpen}
+                        theme={theme}
+                        setTheme={setTheme}
+                    />
+                </div>
 
                 <SettingsDrawer
                     isSheetOpen={isSheetOpen}
@@ -81,18 +96,20 @@ export function Chat() {
                 />
             </header>
 
-            <main>
+            <main className="flex-1 overflow-y-auto">
                 <MessageArea
                     messages={messages}
                 />
             </main>
 
-            <MessageInputBar
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                handleSendMessage={handleSendMessage}
-                isLoading={isLoading}
-            />
+            <div className="shrink-0">
+                <MessageInputBar
+                    inputValue={inputValue}
+                    setInputValue={setInputValue}
+                    handleSendMessage={handleSendMessage}
+                    isLoading={isLoading}
+                />
+            </div>
         </div>
         </>
     );
