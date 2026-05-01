@@ -1,6 +1,11 @@
 import RedisSingleton from "@/lib/redis";
 import { v4 as uuidv4 } from 'uuid';
 
+export type ValidateIdResponse = {
+    exists: boolean,
+    conversationId: string
+}
+
 export async function POST(req: Request) {
     try {
         const { id } = await req.json();

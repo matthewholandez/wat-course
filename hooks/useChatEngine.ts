@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { Message } from "@/app/chat/MessageArea";
 import type { CreateIdResponse } from "@/app/api/chat/createId/route";
+import type { ValidateIdResponse } from "@/app/api/chat/validateId/route";
 
 /**
  * A request containing a user message to be sent to the API.
@@ -89,8 +90,7 @@ export default function useChatEngine() {
                     throw new Error("Failed to verify conversationId via API");
                 }
 
-                const data = await response.json()
-                console.log(data)
+                const data: ValidateIdResponse = await response.json()
                 validId = data.conversationId;
             } else {
                 const response = await fetch('api/chat/createId', {
@@ -102,7 +102,7 @@ export default function useChatEngine() {
                 }
 
                 const data: CreateIdResponse = await response.json();
-                validId = data.id;
+                validId = data.conversationId;
             }
             setTimeout(() => {
                 setCurrentConversationId(validId);
