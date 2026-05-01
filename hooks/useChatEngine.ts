@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import type { Message } from "@/app/chat/MessageArea";
 import type { CreateIdResponse } from "@/app/api/chat/createId/route";
 import type { ValidateIdResponse } from "@/app/api/chat/validateId/route";
+import type { MessageHistoryResponse } from "@/app/api/chat/history/route";
 
 /**
  * A request containing a user message to be sent to the API.
@@ -109,6 +110,28 @@ export default function useChatEngine() {
         }
 
         handleIdCheck(savedConversationId);
+
+        const handleMessageHistory = async () => {
+            const response = await fetch(`api/chat/history?id=${savedConversationId}`, {
+                method: 'GET',
+                // body: JSON.stringify({ id: currentConversationId })
+            });
+
+            if (!response.ok || !response.body) {
+                throw new Error("Failed to fetch message history");
+            }
+
+            const data: MessageHistoryResponse = await response.json()
+            setTimeout(() => {
+                setMessages(data.messageHistory);
+            }, 0)
+        }
+        
+        handleMessageHistory();
+        // if (currentConversationId) {
+        //     console.log("YESSSS")
+        //     handleMessageHistory();
+        // }
     }, [])
 
     return {
