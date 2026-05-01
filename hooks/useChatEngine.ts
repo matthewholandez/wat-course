@@ -22,23 +22,21 @@ export default function useChatEngine() {
     const handleSendMessage = async () => {
         if (!inputValue.trim() || isLoading) return;
         
-        const userMessage = inputValue;
-        const uMsg: MessageRequest = {
-            conversationId: "lol",
+        const userMessage: MessageRequest = {
+            conversationId: currentConversationId,
             content: "lol"
         }
         setInputValue("");
         setIsLoading(true);
         
         // Optimistically add user message
-        // TODO: Type this as well
-        setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+        setMessages((prev) => [...prev, { role: "user", content: userMessage.content }]);
 
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage }),
+                body: JSON.stringify(userMessage),
             });
 
             if (!response.ok || !response.body) {
