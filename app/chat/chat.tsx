@@ -15,9 +15,6 @@ import MessageInputBar from "./MessageInputBar";
 import useUserProfile from "@/hooks/useUserProfile";
 import useChatEngine from "@/hooks/useChatEngine";
 
-// Types
-import type { Message } from "./MessageArea";
-
 export function Chat() {
     const { theme, setTheme } = useTheme();
     const [isSheetOpen, setIsSheetOpen] = useState(false);
