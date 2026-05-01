@@ -1,14 +1,12 @@
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import Image from "next/image"
-import { ModeToggle } from "@/components/mode-toggle"
+import { Button } from "@/components/ui/button"
+import { ModeToggle } from "@/components/ModeToggle"
+import HomeIcon from "@/components/HomeIcon"
 
 function Header() {
     return (
         <header className="flex h-16 shrink-0 items-center justify-between border-b px-4 md:px-6">
-            <Link href="/" className="font-bold text-lg">
-                <Image src="/apple-icon.png" alt="Wat Course" width={32} height={32} className="rounded-md" />
-            </Link>
+            <HomeIcon/>
             <nav className="flex items-center gap-4 sm:gap-6">
                 <Link className="text-sm font-medium hover:underline underline-offset-4" href="/about">
                     About
