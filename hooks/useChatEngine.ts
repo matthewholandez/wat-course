@@ -110,6 +110,24 @@ export default function useChatEngine() {
         }
 
         handleIdCheck(savedConversationId);
+
+        const handleMessageHistory = async () => {
+            const response = await fetch(`api/chat/history?id=${savedConversationId}`, {
+                method: 'GET',
+                // body: JSON.stringify({ id: currentConversationId })
+            });
+
+            if (!response.ok || !response.body) {
+                throw new Error("Failed to fetch message history");
+            }
+
+            const data: MessageHistoryResponse = await response.json()
+            setTimeout(() => {
+                setMessages(data.messageHistory);
+            }, 0)
+        }
+        
+        handleMessageHistory();
     }, [])
 
     const handleNewChat = async () => {
