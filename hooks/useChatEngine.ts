@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Message } from "@/app/chat/MessageArea";
 
-export default function useChatEngine(currentConversationId: string) {
+export default function useChatEngine() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [currentConversationId, setCurrentConversationId] = useState("");
 
     const handleSendMessage = async () => {
         if (!inputValue.trim() || isLoading) return;
@@ -19,7 +20,6 @@ export default function useChatEngine(currentConversationId: string) {
         setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
 
         try {
-            console.log(currentConversationId)
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -57,6 +57,14 @@ export default function useChatEngine(currentConversationId: string) {
             setIsLoading(false);
         }
     };
+
+    // Run once
+    useEffect(() => {
+        const savedConversationId = localStorage.getItem("conversationId");
+        if (savedConversationId) {
+            fetch('/api/chat/validate') //how
+        }
+    })
 
     return {
         messages,

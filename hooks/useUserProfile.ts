@@ -14,11 +14,8 @@ export default function useUserProfile() {
     const [selectedProgram, setSelectedProgram] = useState<string>("");
     const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
 
-    // Active Conversation ID
-    const [currentConversationId, setCurrentConversationId] = useState<string>("");
-
     // Run On Start
-        useEffect(() => {
+    useEffect(() => {
         // Check if user has already set up
         const savedProgram = localStorage.getItem("userProgram");
         const savedCourses = localStorage.getItem("userCourses");
@@ -34,10 +31,10 @@ export default function useUserProfile() {
                     setSelectedCourses([]);
                 }
                 setIsSetupComplete(true);
-                setCurrentConversationId(self.crypto.randomUUID());
             } else {
                 setIsSetupComplete(false);
             }
+            
         }, 0);
     }, []);
 
@@ -47,6 +44,5 @@ export default function useUserProfile() {
         editCourses, setEditCourses,
         selectedProgram, setSelectedProgram,
         selectedCourses, setSelectedCourses,
-        currentConversationId, setCurrentConversationId
     }
 }

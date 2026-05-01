@@ -26,15 +26,14 @@ export function Chat() {
         editProgram, setEditProgram, 
         editCourses, setEditCourses, 
         selectedProgram, setSelectedProgram, 
-        selectedCourses, setSelectedCourses, 
-        currentConversationId, setCurrentConversationId } = useUserProfile();
+        selectedCourses, setSelectedCourses } = useUserProfile();
     
     const {
         messages,
         inputValue, setInputValue,
         isLoading, setIsLoading,
         handleSendMessage
-    } = useChatEngine(currentConversationId);
+    } = useChatEngine();
 
     return (
         <>

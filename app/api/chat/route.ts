@@ -1,6 +1,5 @@
 import { OpenRouter } from "@openrouter/sdk";
 import RedisSingleton from "@/lib/redis";
-import { SCHEMA_FIELD_TYPE, FT_AGGREGATE_GROUP_BY_REDUCERS, FT_AGGREGATE_STEPS } from "redis";
 
 export const runtime = "nodejs";
 
@@ -8,9 +7,14 @@ const openRouterClient = new OpenRouter({
     apiKey: process.env.OPENROUTER_API_KEY || ""
 })
 
+type MessageRequest = {
+    conversationId: string,
+    message: string
+}
+
 export async function POST(req: Request) {
     try {
-        const { message, conversationId } = await req.json();
+        const { conversationId, message }: MessageRequest = await req.json();
 
         if (!process.env.OPENROUTER_API_KEY) {
             return new Response("Missing OPENROUTER_API_KEY from .env.local", { status: 500 });
