@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google"
+import { Fraunces, Geist, Geist_Mono, JetBrains_Mono } from "next/font/google"
 
 import { Metadata } from "next";
 
@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 
 const jetbrainsMonoHeading = JetBrains_Mono({ subsets: ['latin'], variable: '--font-heading' });
+
+const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', axes: ['opsz'] });
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -24,7 +26,7 @@ export default function RootLayout({
         <html
             lang="en"
             suppressHydrationWarning
-            className={cn("antialiased", fontMono.variable, "font-sans", geist.variable, jetbrainsMonoHeading.variable)}
+            className={cn("antialiased", fontMono.variable, "font-sans", geist.variable, jetbrainsMonoHeading.variable, fraunces.variable)}
         >
             <body>
                 <ThemeProvider>{children}</ThemeProvider>
