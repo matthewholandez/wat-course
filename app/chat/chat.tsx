@@ -6,12 +6,11 @@ import { useTheme } from "next-themes";
 // Components
 import HomeIcon from "@/components/HomeIcon";
 import SetupScreen from "./SetupScreen";
-import SettingsDropdown from "./SettingsDropdown";
-import SettingsDrawer from "./SettingsDrawer";
+import SettingsModal from "./SettingsModal";
 import MessageArea from "./MessageArea";
 import MessageInputBar from "./MessageInputBar";
 
-import { Plus } from "lucide-react";
+import { Plus, Settings } from "lucide-react";
 
 // States
 import useUserProfile from "@/hooks/useUserProfile";
@@ -19,14 +18,12 @@ import useChatEngine from "@/hooks/useChatEngine";
 
 export function Chat() {
     const { theme, setTheme } = useTheme();
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-    const { isSetupComplete, setIsSetupComplete, 
-        editProgram, setEditProgram, 
-        editCourses, setEditCourses, 
-        selectedProgram, setSelectedProgram, 
+    const { isSetupComplete, setIsSetupComplete,
+        selectedProgram, setSelectedProgram,
         selectedCourses, setSelectedCourses } = useUserProfile();
-    
+
     const {
         messages,
         inputValue, setInputValue,
@@ -99,26 +96,36 @@ export function Chat() {
                 </button>
 
                 <div className="ml-auto flex items-center">
-                    <SettingsDropdown
-                        selectedProgram={selectedProgram}
-                        setEditProgram={setEditProgram}
-                        selectedCourses={selectedCourses}
-                        setEditCourses={setEditCourses}
-                        setIsSheetOpen={setIsSheetOpen}
-                        theme={theme}
-                        setTheme={setTheme}
-                    />
+                    <button
+                        onClick={() => setIsSettingsOpen(true)}
+                        aria-label="Settings"
+                        className="flex items-center justify-center cursor-pointer transition-colors"
+                        style={{
+                            width: '36px',
+                            height: '36px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: 'var(--wc-fg-muted)',
+                            transitionTimingFunction: 'var(--wc-ease-out)',
+                            transitionDuration: '120ms',
+                        }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--wc-sunken)'; (e.currentTarget as HTMLElement).style.color = 'var(--wc-fg)'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--wc-fg-muted)'; }}
+                    >
+                        <Settings className="h-5 w-5" />
+                    </button>
                 </div>
 
-                <SettingsDrawer
-                    isSheetOpen={isSheetOpen}
-                    setIsSheetOpen={setIsSheetOpen}
-                    editProgram={editProgram}
-                    setEditProgram={setEditProgram}
-                    editCourses={editCourses}
-                    setEditCourses={setEditCourses}
+                <SettingsModal
+                    open={isSettingsOpen}
+                    onOpenChange={setIsSettingsOpen}
+                    selectedProgram={selectedProgram}
                     setSelectedProgram={setSelectedProgram}
+                    selectedCourses={selectedCourses}
                     setSelectedCourses={setSelectedCourses}
+                    theme={theme}
+                    setTheme={setTheme}
                 />
             </header>
 
