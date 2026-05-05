@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: oklch(1 0 0);
+    --background: oklch(0.988 0.008 93);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
@@ -115,6 +115,101 @@
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
 }
+
+/* ── Wat Course design tokens ─────────────────────────────────────────── */
+:root {
+    --gold-50:  #FFFAEA;
+    --gold-100: #FFF3C4;
+    --gold-200: #FFE894;
+    --gold-300: #FFDD6B;
+    --gold-400: #FFD54F;
+    --gold-500: #F5C32C;
+    --gold-600: #E4B429;
+    --gold-700: #B88A12;
+    --gold-800: #8A6608;
+    --gold-900: #5C4304;
+
+    --ink-50:   #F7F7F8;
+    --ink-100:  #ECECEE;
+    --ink-200:  #D9DADD;
+    --ink-300:  #B8BAC0;
+    --ink-400:  #8A8C95;
+    --ink-500:  #5E6068;
+    --ink-600:  #40424A;
+    --ink-700:  #2A2C33;
+    --ink-800:  #1A1B20;
+    --ink-900:  #111217;
+    --ink-950:  #0A0B0F;
+
+    --faculty-arts:   #D93F00;
+    --faculty-eng:    #5D0096;
+    --faculty-env:    #607000;
+    --faculty-health: #115E6B;
+    --faculty-math:   #A2006E;
+    --faculty-sci:    #003599;
+
+    /* Surfaces */
+    --wc-bg:        #FDFCF7;
+    --wc-elev-1:    #FFFFFF;
+    --wc-sunken:    #F4F2EA;
+
+    /* Foreground */
+    --wc-fg:         #111217;
+    --wc-fg-muted:   #40424A;
+    --wc-fg-subtle:  #8A8C95;
+    --wc-fg-on-accent: #111217;
+
+    /* Accent */
+    --wc-accent:          #FFD54F;
+    --wc-accent-hover:    #F5C32C;
+    --wc-accent-soft:     #FFF3C4;
+    --wc-accent-soft-fg:  #8A6608;
+    --wc-accent-ring:     rgba(255, 213, 79, 0.55);
+
+    /* Borders */
+    --wc-border:        #D9DADD;
+    --wc-border-strong: #B8BAC0;
+
+    /* Shadows */
+    --wc-shadow-md:  0 4px 12px rgba(17,18,23,0.08), 0 2px 4px rgba(17,18,23,0.04);
+    --wc-shadow-pop: 0 8px 24px rgba(184, 138, 18, 0.18);
+
+    /* Motion */
+    --wc-ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.dark {
+    --wc-bg:        #0A0B0F;
+    --wc-elev-1:    #111217;
+    --wc-sunken:    #06070A;
+
+    --wc-fg:         #F5F5F7;
+    --wc-fg-muted:   #B8BAC0;
+    --wc-fg-subtle:  #8A8C95;
+    --wc-fg-on-accent: #111217;
+
+    --wc-accent:         #FFD54F;
+    --wc-accent-hover:   #FFDD6B;
+    --wc-accent-soft:    rgba(255, 213, 79, 0.14);
+    --wc-accent-soft-fg: #FFDD6B;
+    --wc-accent-ring:    rgba(255, 213, 79, 0.45);
+
+    --wc-border:        rgba(255, 255, 255, 0.08);
+    --wc-border-strong: rgba(255, 255, 255, 0.16);
+
+    --wc-shadow-md:  0 4px 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
+    --wc-shadow-pop: 0 8px 24px rgba(255, 213, 79, 0.14);
+}
+/* User chat bubble: dark bg in light mode, inverted in dark mode */
+.wc-bubble-user {
+    background: var(--ink-900);
+    color: #fff;
+}
+.dark .wc-bubble-user {
+    background: #fff;
+    color: var(--ink-900);
+}
+/* ────────────────────────────────────────────────────────────────────────── */
 
 @keyframes blink {
     50% { opacity: 0; }

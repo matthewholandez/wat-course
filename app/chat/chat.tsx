@@ -11,7 +11,6 @@ import SettingsDrawer from "./SettingsDrawer";
 import MessageArea from "./MessageArea";
 import MessageInputBar from "./MessageInputBar";
 
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 // States
@@ -59,20 +58,47 @@ export function Chat() {
         />
         {/* --------- */}
 
-        <div className="flex h-[100dvh] flex-col overflow-hidden">
-            <header className="border-b p-4 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-2">
-                    <HomeIcon/>
-                    <Button variant="outline" size="sm" onClick={handleNewChat} className="ml-2 hidden sm:flex">
-                        <Plus className="mr-2 h-4 w-4" />
-                        New Chat
-                    </Button>
-                    <Button variant="outline" size="icon" onClick={handleNewChat} className="ml-2 sm:hidden" aria-label="New Chat">
-                        <Plus className="h-4 w-4" />
-                    </Button>
-                </div>
+        <div className="flex h-[100dvh] flex-col overflow-hidden" style={{ background: 'var(--wc-bg)', color: 'var(--wc-fg)' }}>
+            <header className="h-14 px-6 shrink-0 flex items-center gap-3" style={{ borderBottom: '1px solid var(--wc-border)', background: 'var(--wc-bg)' }}>
+                <HomeIcon/>
+                <button
+                    onClick={handleNewChat}
+                    className="hidden sm:flex items-center gap-2 text-sm font-semibold cursor-pointer transition-all"
+                    style={{
+                        background: 'var(--wc-accent)',
+                        color: 'var(--wc-fg-on-accent)',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '8px 14px',
+                        fontFamily: 'var(--font-sans)',
+                        transitionTimingFunction: 'var(--wc-ease-out)',
+                        transitionDuration: '200ms',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--wc-accent-hover)'; (e.currentTarget as HTMLElement).style.boxShadow = 'var(--wc-shadow-pop)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--wc-accent)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
+                >
+                    <Plus className="h-4 w-4" />
+                    New Chat
+                </button>
+                <button
+                    onClick={handleNewChat}
+                    className="sm:hidden flex items-center justify-center cursor-pointer transition-all"
+                    aria-label="New Chat"
+                    style={{
+                        background: 'var(--wc-accent)',
+                        color: 'var(--wc-fg-on-accent)',
+                        border: 'none',
+                        borderRadius: '10px',
+                        width: '36px',
+                        height: '36px',
+                        transitionTimingFunction: 'var(--wc-ease-out)',
+                        transitionDuration: '200ms',
+                    }}
+                >
+                    <Plus className="h-4 w-4" />
+                </button>
 
-                <div className="flex items-center gap-2">
+                <div className="ml-auto flex items-center">
                     <SettingsDropdown
                         selectedProgram={selectedProgram}
                         setEditProgram={setEditProgram}
@@ -96,13 +122,13 @@ export function Chat() {
                 />
             </header>
 
-            <main className="flex-1 overflow-y-auto">
+            <main className="flex-1 overflow-y-auto" style={{ background: 'var(--wc-bg)' }}>
                 <MessageArea
                     messages={messages}
                 />
             </main>
 
-            <div className="shrink-0">
+            <div className="shrink-0" style={{ background: 'var(--wc-bg)' }}>
                 <MessageInputBar
                     inputValue={inputValue}
                     setInputValue={setInputValue}
