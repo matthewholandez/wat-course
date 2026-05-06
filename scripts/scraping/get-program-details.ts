@@ -10,11 +10,11 @@ const PROG_DETAIL_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/program/67e
 export type ProgramDetail = {
     __passedCatalogQuery: boolean,
     _score: number,
-    additionalConstraints: string,
+    additionalConstraints?: string,
     admissionRequirements?: string,
     catalogActivationDate: string,
-    code: string,
     coOperativeRequirementsUndergraduate?: string,
+    code: string,
     courseListsNew?: string,
     courseRequirementsNoUnits?: string,
     dateStart: string,
@@ -32,12 +32,18 @@ export type ProgramDetail = {
     graduationRequirements: string,
     id: string,
     minimumAverageSRequired: string,
+    onlineDegree?: {
+        id?: string,
+        name?: string,
+    }[],
     pid: string,
     requiredCoursesTermByTerm?: string,
     requirements?: string,
+    specialNotice?: string,
     specializations: string[],
     specializationDetails?: string,
     specializationsList?: string,
+    specializationsYesrequired?: string,
     systemsOfStudy?: {
         coOperative?: boolean,
         regular?: boolean,
@@ -72,7 +78,7 @@ async function getAllProgramData() {
 const majorData: Program[] | null = await getAllProgramData();
 
 if (!majorData) {
-    console.log("Run scripts/scraping/get-all-programs.ts first to load the current list of all courses.")
+    console.log("Run scripts/scraping/get-all-programs.ts first to load the current list of all programs.")
     exit(1);
 }
 
