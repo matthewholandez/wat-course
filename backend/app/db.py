@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import FastAPI, Depends
 from contextlib import asynccontextmanager
 
-POSTGRES_URL = "postgresql://matthew@localhost:5432/watcourse"
+POSTGRES_URL = "postgresql+psycopg://matthew@localhost:5432/watcourse"
 
 engine = create_engine(POSTGRES_URL, echo=True)
 

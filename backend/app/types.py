@@ -55,3 +55,11 @@ class ProgramListItem(SQLModel):
 
 class ProgramDetail(ProgramListItem):
     detail: dict[str, Any]
+
+
+class CourseSearchHit(CourseListItem):
+    score: float
+
+
+class ProgramSearchHit(ProgramListItem):
+    score: float
