@@ -1,18 +1,30 @@
-from fastapi import APIRouter, Query
+from typing import Annotated
+
+from fastapi import APIRouter, HTTPException, Query
 from sqlmodel import select
 
-from app.types import ReadCourse, Course
 from app.db import SessionDep
-
-from typing import Annotated
+from app.types import Course, CourseDetail, CourseListItem, normalize_code
 
 router = APIRouter()
 
-@router.get("/courses", response_model=list[ReadCourse])
+
+@router.get("/courses", response_model=list[CourseListItem])
 def read_courses(
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 100
-    ):
-    courses = session.exec(select(Course).offset(offset).limit(limit)).all()
-    return courses
+    limit: Annotated[int, Query(le=100)] = 100,
+):
+    return session.exec(
+        select(Course).order_by(Course.code).offset(offset).limit(limit)
+    ).all()
+
+
+@router.get("/courses/{code}", response_model=CourseDetail)
+def read_course(code: str, session: SessionDep):
+    course = session.exec(
+        select(Course).where(Course.code == normalize_code(code))
+    ).first()
+    if course is None:
+        raise HTTPException(status_code=404, detail="Course not found")
+    return course
