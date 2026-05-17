@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from typing import Any
 
 from sqlalchemy import Column
@@ -59,6 +60,30 @@ class ProgramDetail(ProgramListItem):
 
 class CourseSearchHit(CourseListItem):
     score: float
+
+
+class CourseRequirements(SQLModel, table=True):
+    pid: str = Field(primary_key=True, foreign_key="course.pid")
+    prereqs: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    coreqs: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    antireqs: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    source_hash: str
+    parsed_by: str
+    parsed_at: datetime
+
+
+class CourseRequirementsResponse(SQLModel):
+    pid: str
+    code: str
+    prereqs: dict[str, Any] | None = None
+    coreqs: dict[str, Any] | None = None
+    antireqs: dict[str, Any] | None = None
 
 
 class ProgramSearchHit(ProgramListItem):
