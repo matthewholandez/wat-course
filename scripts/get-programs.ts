@@ -2,6 +2,7 @@ import axios from "axios";
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const PROG_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/programs/67e557ed6ed2fe2bd3a38956?q="
+const PROG_DETAIL_URL = "https://uwaterloocm.kuali.co/api/v1/catalog/program/67e557ed6ed2fe2bd3a38956/"
 
 export type Program = {
     code: string;
